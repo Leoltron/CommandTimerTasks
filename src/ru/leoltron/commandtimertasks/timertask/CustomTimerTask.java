@@ -16,11 +16,11 @@ public abstract class CustomTimerTask extends TimerTask {
     public void runInTimer(Timer timer) {
         if (repeatOptions.shouldRepeat())
         {
-            timer.schedule(this, repeatOptions.getDelayMillis());
+            timer.schedule(this, repeatOptions.getDelayMillis(), repeatOptions.getPeriodMillis());
         }
         else
         {
-            timer.schedule(this, repeatOptions.getDelayMillis(), repeatOptions.getPeriodMillis());
+            timer.schedule(this, repeatOptions.getDelayMillis());
         }
     }
 }

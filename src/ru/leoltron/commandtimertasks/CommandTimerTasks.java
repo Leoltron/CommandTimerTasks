@@ -37,6 +37,8 @@ public class CommandTimerTasks extends JavaPlugin
     private Pattern LINE_PATTERN = Pattern.compile("(TIME(?:(?:\\s+[\\d]+(?:ms|s|m|h|d))+)(?:\\s+PERIOD(?:(?:\\s+[\\d]+(?:ms|s|m|h|d))+))?)\\s+(COMMAND|MESSAGE)\\s+(.*)", Pattern.CASE_INSENSITIVE);
     private Random rand = new Random();
 
+    private boolean debug = false;
+
     private static void createExampleCommandsFile(File commandsFile) throws IOException
     {
         //noinspection ResultOfMethodCallIgnored
@@ -69,18 +71,23 @@ public class CommandTimerTasks extends JavaPlugin
                 createExampleCommandsFile(commandsFile);
                 getLogger().log(Level.WARNING, "Created file \"" + COMMANDS_FILE + "\", check it to learn how to" +
                         " use plugin, modify it and reload the plugin. Plugin will be disabled.");
-                Bukkit.getServer().getPluginManager().disablePlugin(this);
+                disableSelf();
                 return;
             }
             lines = Files.readAllLines(Paths.get(COMMANDS_FILE));
         } catch (IOException e)
         {
             getLogger().log(Level.SEVERE, "Can't read \"" + COMMANDS_FILE + "\", plugin will be disabled.", e);
-            Bukkit.getServer().getPluginManager().disablePlugin(this);
+            disableSelf();
             return;
         }
         parseTasks(lines);
         startTasks();
+    }
+
+    private void disableSelf()
+    {
+        Bukkit.getServer().getPluginManager().disablePlugin(this);
     }
 
     private void parseTasks(Iterable<String> lines)
@@ -148,18 +155,24 @@ public class CommandTimerTasks extends JavaPlugin
             String type = matcher.group(2);
             String value = matcher.group(3);
 
-            if (type.equalsIgnoreCase("message"))
+            if (debug)
             {
-                return new MessageBroadcastTimerTask(value, repeatOptions);
+                getLogger().info(
+                        String.format("Parsed %s task with repeating options %s",
+                                type.toLowerCase(),
+                                repeatOptions.toString())
+                );
             }
-            else if (type.equalsIgnoreCase("command"))
+
+            switch (type.toLowerCase())
             {
-                return new CommandExecutorTimerTask(value, repeatOptions);
-            }
-            else
-            {
-                getLogger().warning(String.format("Can't parse task \"%s\": invalid type (\"%s\")", string, type));
-                return null;
+                case "message":
+                    return new MessageBroadcastTimerTask(value, repeatOptions);
+                case "command":
+                    return new CommandExecutorTimerTask(value, repeatOptions);
+                default:
+                    getLogger().warning(String.format("Can't parse task \"%s\": invalid type (\"%s\")", string, type));
+                    return null;
             }
         }
         else

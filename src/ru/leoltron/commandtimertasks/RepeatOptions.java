@@ -34,4 +34,13 @@ public class RepeatOptions
     {
         return periodMillis > 0;
     }
+
+    @Override
+    public String toString()
+    {
+        return "RepeatOptions{" +
+                "delayMillis=" + delayMillis +
+                ", periodMillis=" + periodMillis +
+                '}';
+    }
 }
