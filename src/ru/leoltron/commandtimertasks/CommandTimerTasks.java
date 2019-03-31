@@ -245,7 +245,8 @@ public class CommandTimerTasks extends JavaPlugin
     {
         String commandName = command.getName();
         if (commandName.equalsIgnoreCase("CommandTimerTasks")
-                || commandName.equalsIgnoreCase("ctt"))
+                || commandName.equalsIgnoreCase("ctt")
+                || commandName.equalsIgnoreCase("com"))
         {
             if (args.length == 1 && args[0].equalsIgnoreCase("reload"))
             {
