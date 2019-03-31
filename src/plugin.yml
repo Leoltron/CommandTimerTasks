@@ -1,3 +1,9 @@
 name: CommandTimerTasks
 main: ru.leoltron.commandtimertasks.CommandTimerTasks
-version: 1.0
+version: "1.2"
+
+commands:
+  CommandTimerTasks:
+    description: Basic plugin command
+    aliases: [ctt, com]
+    usage: /CommandTimerTasks reload

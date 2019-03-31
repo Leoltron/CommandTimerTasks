@@ -1,15 +1,16 @@
 package ru.leoltron.commandtimertasks.timertask;
 
 import org.bukkit.Bukkit;
+import ru.leoltron.commandtimertasks.RepeatOptions;
 
 public class MessageBroadcastTimerTask extends CustomTimerTask {
 
     private String message;
 
-    public MessageBroadcastTimerTask(String message, int delay, int period) {
+    public MessageBroadcastTimerTask(String message, RepeatOptions repeatOptions)
+    {
+        super(repeatOptions);
         this.message = message;
-        this.delay = delay;
-        this.period = period;
     }
 
     @Override
